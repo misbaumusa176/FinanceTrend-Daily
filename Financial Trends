@@ -1,169 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>FinanceTrend Daily</title>
 
 <style>
-
-body{
-font-family: Arial;
-margin:0;
-background:#f2f5f9;
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f2f5f9;
 }
 
-header{
-background:#0b1f3a;
-color:white;
-padding:25px;
-text-align:center;
+header {
+  background: #0b1f3a;
+  color: white;
+  padding: 25px;
+  text-align: center;
 }
 
-nav{
-background:#132f54;
-padding:12px;
-text-align:center;
+nav {
+  background: #132f54;
+  padding: 12px;
+  text-align: center;
 }
 
-nav a{
-color:white;
-margin:10px;
-text-decoration:none;
-font-weight:bold;
+nav a {
+  color: white;
+  margin: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: opacity 0.3s;
 }
 
-.container{
-max-width:1000px;
-margin:auto;
-padding:20px;
+nav a:hover {
+  opacity: 0.8;
 }
 
-.news{
-background:white;
-padding:20px;
-margin-bottom:20px;
-border-radius:8px;
-box-shadow:0 0 8px rgba(0,0,0,0.1);
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
 }
 
-.news h3{
-margin-top:0;
+.news {
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
 }
 
-button{
-background:#00c853;
-color:white;
-border:none;
-padding:12px 20px;
-font-size:16px;
-border-radius:5px;
-cursor:pointer;
+.news:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.donate{
-background:#0b1f3a;
-color:white;
-padding:30px;
-text-align:center;
-border-radius:10px;
+.news h3 {
+  margin-top: 0;
+  color: #0b1f3a;
 }
 
-footer{
-background:#132f54;
-color:white;
-text-align:center;
-padding:15px;
-margin-top:20px;
+.news a {
+  color: #00c853;
+  text-decoration: none;
+  font-weight: bold;
 }
 
+.news a:hover {
+  text-decoration: underline;
+}
+
+button {
+  background: #00c853;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #00a842;
+}
+
+.donate {
+  background: #0b1f3a;
+  color: white;
+  padding: 30px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.error {
+  background: #ffebee;
+  color: #c62828;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+footer {
+  background: #132f54;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  margin-top: 20px;
+}
 </style>
-
 </head>
 
 <body>
-
 <header>
-<h1>FinanceTrend Daily</h1>
-<p>Daily Financial Trends, Markets & Crypto Insights</p>
+  <h1>FinanceTrend Daily</h1>
+  <p>Daily Financial Trends, Markets & Crypto Insights</p>
 </header>
 
 <nav>
-<a href="#">Home</a>
-<a href="#">Markets</a>
-<a href="#">Crypto</a>
-<a href="#">Economy</a>
-<a href="#">Contact</a>
+  <a href="#home">Home</a>
+  <a href="#markets">Markets</a>
+  <a href="#crypto">Crypto</a>
+  <a href="#economy">Economy</a>
+  <a href="#contact">Contact</a>
 </nav>
 
 <div class="container">
+  <h2>Latest Financial News</h2>
+  <div id="loading" class="loading">Loading news...</div>
+  <div id="error"></div>
+  <div id="news-container"></div>
 
-<h2>Latest Financial News</h2>
-
-<div id="news-container"></div>
-
-<div class="donate">
-
-<h2>Support This Platform</h2>
-
-<p>If you value daily financial insights, support this project.</p>
-
-<a href="https://cash.app/$MisbauMusa">
-<button>Donate via CashApp</button>
-</a>
-
-</div>
-
+  <div class="donate">
+    <h2>Support This Platform</h2>
+    <p>If you value daily financial insights, support this project.</p>
+    <a href="https://cash.app/$MisbauMusa" target="_blank">
+      <button>Donate via CashApp</button>
+    </a>
+  </div>
 </div>
 
 <footer>
-
-<p>© 2026 FinanceTrend Daily</p>
-
+  <p>© 2026 FinanceTrend Daily</p>
 </footer>
 
 <script>
+  // Fetch API key from backend (RECOMMENDED) or environment variable
+  // For now, consider moving this to a backend service
+  const fetchNews = async () => {
+    try {
+      const loadingDiv = document.getElementById("loading");
+      const errorDiv = document.getElementById("error");
+      const newsContainer = document.getElementById("news-container");
 
-const apiKey = "5423d1130c8d4b0985ca20396f36be60";
+      // Call your backend endpoint instead of exposing API key
+      const response = await fetch("/api/news"); // Replace with your backend endpoint
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-const url = `https://newsapi.org/v2/top-headlines?category=business&language=en&apiKey=${apiKey}`;
+      const data = await response.json();
+      loadingDiv.style.display = "none";
 
-fetch(url)
+      if (!data.articles || data.articles.length === 0) {
+        errorDiv.innerHTML = '<div class="error">No articles found. Please try again later.</div>';
+        return;
+      }
 
-.then(response => response.json())
+      data.articles.slice(0, 6).forEach(article => {
+        let news = document.createElement("div");
+        news.className = "news";
+        news.innerHTML = `
+          <h3>${article.title}</h3>
+          <p>${article.description || "No description available"}</p>
+          <a href="${article.url}" target="_blank">Read full article →</a>
+        `;
+        newsContainer.appendChild(news);
+      });
+    } catch (error) {
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("error").innerHTML = `
+        <div class="error">Error loading news: ${error.message}</div>
+      `;
+      console.error("Error fetching news:", error);
+    }
+  };
 
-.then(data => {
-
-let newsContainer = document.getElementById("news-container");
-
-data.articles.slice(0,6).forEach(article => {
-
-let news = document.createElement("div");
-
-news.className="news";
-
-news.innerHTML=`
-
-<h3>${article.title}</h3>
-
-<p>${article.description || ""}</p>
-
-<a href="${article.url}" target="_blank">Read full article</a>
-
-`;
-
-newsContainer.appendChild(news);
-
-});
-
-})
-
-.catch(error => console.log(error));
-
+  fetchNews();
 </script>
 
 </body>
-
 </html>
