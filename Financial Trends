@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>FinanceTrend Daily</title>
+
+<style>
+
+body{
+font-family: Arial;
+margin:0;
+background:#f2f5f9;
+}
+
+header{
+background:#0b1f3a;
+color:white;
+padding:25px;
+text-align:center;
+}
+
+nav{
+background:#132f54;
+padding:12px;
+text-align:center;
+}
+
+nav a{
+color:white;
+margin:10px;
+text-decoration:none;
+font-weight:bold;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:20px;
+}
+
+.news{
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:8px;
+box-shadow:0 0 8px rgba(0,0,0,0.1);
+}
+
+.news h3{
+margin-top:0;
+}
+
+button{
+background:#00c853;
+color:white;
+border:none;
+padding:12px 20px;
+font-size:16px;
+border-radius:5px;
+cursor:pointer;
+}
+
+.donate{
+background:#0b1f3a;
+color:white;
+padding:30px;
+text-align:center;
+border-radius:10px;
+}
+
+footer{
+background:#132f54;
+color:white;
+text-align:center;
+padding:15px;
+margin-top:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>FinanceTrend Daily</h1>
+<p>Daily Financial Trends, Markets & Crypto Insights</p>
+</header>
+
+<nav>
+<a href="#">Home</a>
+<a href="#">Markets</a>
+<a href="#">Crypto</a>
+<a href="#">Economy</a>
+<a href="#">Contact</a>
+</nav>
+
+<div class="container">
+
+<h2>Latest Financial News</h2>
+
+<div id="news-container"></div>
+
+<div class="donate">
+
+<h2>Support This Platform</h2>
+
+<p>If you value daily financial insights, support this project.</p>
+
+<a href="https://cash.app/$MisbauMusa">
+<button>Donate via CashApp</button>
+</a>
+
+</div>
+
+</div>
+
+<footer>
+
+<p>© 2026 FinanceTrend Daily</p>
+
+</footer>
+
+<script>
+
+const apiKey = "5423d1130c8d4b0985ca20396f36be60";
+
+const url = `https://newsapi.org/v2/top-headlines?category=business&language=en&apiKey=${apiKey}`;
+
+fetch(url)
+
+.then(response => response.json())
+
+.then(data => {
+
+let newsContainer = document.getElementById("news-container");
+
+data.articles.slice(0,6).forEach(article => {
+
+let news = document.createElement("div");
+
+news.className="news";
+
+news.innerHTML=`
+
+<h3>${article.title}</h3>
+
+<p>${article.description || ""}</p>
+
+<a href="${article.url}" target="_blank">Read full article</a>
+
+`;
+
+newsContainer.appendChild(news);
+
+});
+
+})
+
+.catch(error => console.log(error));
+
+</script>
+
+</body>
+
+</html>
